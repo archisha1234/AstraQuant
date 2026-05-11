@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routes import optimize, quantum
+from app.routes.optimize import router as optimize_router
+from app.routes.quantum import router as quantum_router
 
 app = FastAPI(title="AstraQuant API")
 
@@ -13,13 +14,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# root test
 @app.get("/")
 def root():
     return {"status": "AstraQuant backend running 🚀"}
 
-# include routes
-app.include_router(optimize.router)
-app.include_router(quantum.router)
-
-print(optimize)
+app.include_router(optimize_router)
+app.include_router(quantum_router)
