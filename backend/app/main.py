@@ -1,29 +1,25 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routes import optimize, quantum
+
 app = FastAPI(title="AstraQuant API")
 
-# CORS (safe for frontend + production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://your-frontend.vercel.app"
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ✅ ROOT ENDPOINT (VERY IMPORTANT FOR TESTING)
+# root test
 @app.get("/")
 def root():
-    return {
-        "status": "AstraQuant backend is running 🚀",
-        "docs": "/docs"
-    }
+    return {"status": "AstraQuant backend running 🚀"}
 
-# OPTIONAL TEST ENDPOINT
-@app.get("/health")
-def health():
-    return {"status": "ok"}
+# include routes
+app.include_router(optimize.router)
+app.include_router(quantum.router)
+
+print(optimize)
